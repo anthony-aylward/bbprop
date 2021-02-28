@@ -8,7 +8,7 @@ setuptools.setup(
     version='0.0.1',
     author='Anthony Aylward',
     author_email='aaylward@eng.ucsd.edu',
-    description='Two-sample beta-binomial proportion test',
+    description='Hypothesis test for difference of beta-binomial proportions',
     long_description=long_description,
     long_description_content_type="text/markdown",
     url='https://github.com/anthony-aylward/bbprop.git',
