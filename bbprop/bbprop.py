@@ -14,7 +14,7 @@ from bbpmf import betabinom_pmf
 # Functions ====================================================================
 
 def region(d: float, n0: int, n1: int, func='cdf', exhaustive=False):
-    """Region of integration for bbprop_pdf
+    """Region of integration for bbprop_cdf or bbprop_test
 
     Parameters
     ----------
