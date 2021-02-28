@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name='bbprop',
-    version='0.0.3',
+    version='0.0.4',
     author='Anthony Aylward',
     author_email='aaylward@eng.ucsd.edu',
     description='Hypothesis test for difference of beta-binomial proportions',
