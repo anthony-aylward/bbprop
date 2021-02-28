@@ -14,7 +14,7 @@ pip3 install --user bbprop
 ## Examples
 
 ```python
-from bbprop import bbprop_pdf, bbprop_cdf, bbprop_test
+from bbprop import bbprop_cdf, bbprop_test
 help(bbprop_cdf)
 help(bbprop_test)
 bbprop_cdf(0.1, [30, 12], [4, 5], [6, 5])
