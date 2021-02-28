@@ -13,12 +13,12 @@ from bbpmf import betabinom_pmf
 
 # Functions ====================================================================
 
-def region(d: float, n0: int, n1: int, func='cdf', exhaustive=False):
+def region(x: float, n0: int, n1: int, func='cdf', exhaustive=False):
     """Region of integration for bbprop_cdf or bbprop_test
 
     Parameters
     ----------
-    d : float
+    x : float
         difference of proportions
     n0, n1 : int
         number of trials for the two samples
@@ -39,11 +39,11 @@ def region(d: float, n0: int, n1: int, func='cdf', exhaustive=False):
                 (r0, r1)
                 for r0 in range(n0 + 1)
                 for r1 in (
-                    range(floor(n1/n0 * (r0 + d * n0)) + 1) if r0 < d * n0
-                    else range(ceil(n1/n0 * (r0 - d * n0)), n1 + 1) if r0 > (1 - d) * n0
+                    range(floor(n1/n0 * (r0 + x * n0)) + 1) if r0 < x * n0
+                    else range(ceil(n1/n0 * (r0 - x * n0)), n1 + 1) if r0 > (1 - x) * n0
                     else range(
-                        ceil(n1/n0 * (r0 - d * n0)),
-                        floor(n1/n0 * (r0 + d * n0)) + 1
+                        ceil(n1/n0 * (r0 - x * n0)),
+                        floor(n1/n0 * (r0 + x * n0)) + 1
                     )
                 )
             )
@@ -52,11 +52,11 @@ def region(d: float, n0: int, n1: int, func='cdf', exhaustive=False):
                 (r0, r1)
                 for r0 in range(n0 + 1)
                 for r1 in (
-                    range(ceil(n1/n0 * (r0 + d * n0)), n1 + 1) if r0 < d * n0
-                    else range(floor(n1/n0 * (r0 - d * n0)) + 1) if r0 > (1 - d) * n0
+                    range(ceil(n1/n0 * (r0 + x * n0)), n1 + 1) if r0 < x * n0
+                    else range(floor(n1/n0 * (r0 - x * n0)) + 1) if r0 > (1 - x) * n0
                     else chain(
-                        range(floor(n1/n0 * (r0 - d * n0)) + 1),
-                        range(ceil(n1/n0 * (r0 + d * n0)), n1 + 1)
+                        range(floor(n1/n0 * (r0 - x * n0)) + 1),
+                        range(ceil(n1/n0 * (r0 + x * n0)), n1 + 1)
                     )
                 )
             )
@@ -68,26 +68,26 @@ def region(d: float, n0: int, n1: int, func='cdf', exhaustive=False):
                 (r0, r1)
                 for r0 in range(n0 + 1)
                 for r1 in range(n1 + 1)
-                if abs(r0*n1 - r1*n0) <= n1 * n0 * d
+                if abs(r0*n1 - r1*n0) <= n1 * n0 * x
             )
         elif func == 'test':
             yield from (
                 (r0, r1)
                 for r0 in range(n0 + 1)
                 for r1 in range(n1 + 1)
-                if abs(r0*n1 - r1*n0) >= n1 * n0 * d
+                if abs(r0*n1 - r1*n0) >= n1 * n0 * x
             )
         else:
             raise RuntimeError('invalid "func" option')
 
 
-def bbprop_cdf(d: float, n, a, b, exhaustive=False):
+def bbprop_cdf(x: float, n, a, b, exhaustive=False):
     """Cumulative distribution function for a difference of beta-binomial
     proportions
 
     Parameters
     ----------
-    d
+    x
         difference of proportions
     n
         integer (or iterable of len 2) giving the number of trials
@@ -112,16 +112,16 @@ def bbprop_cdf(d: float, n, a, b, exhaustive=False):
     return sum(
         betabinom_pmf(r[0], n[0], a[0], b[0])
         * betabinom_pmf(r[1], n[1], a[1], b[1])
-        for r in region(d, n[0], n[1], func='cdf', exhaustive=exhaustive)
+        for r in region(x, n[0], n[1], func='cdf', exhaustive=exhaustive)
     )
 
 
-def bbprop_test(d: float, n, a, b, exhaustive=False):
+def bbprop_test(x: float, n, a, b, exhaustive=False):
     """Hypothesis test for a difference of beta-binomial proportions
 
     Parameters
     ----------
-    d
+    x
         difference of proportions
     n
         integer (or iterable of len 2) giving the number of trials
@@ -146,5 +146,5 @@ def bbprop_test(d: float, n, a, b, exhaustive=False):
     return sum(
         betabinom_pmf(r[0], n[0], a[0], b[0])
         * betabinom_pmf(r[1], n[1], a[1], b[1])
-        for r in region(d, n[0], n[1], func='test', exhaustive=exhaustive)
+        for r in region(x, n[0], n[1], func='test', exhaustive=exhaustive)
     )
