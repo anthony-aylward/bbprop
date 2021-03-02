@@ -14,7 +14,7 @@ from bbpmf import betabinom_pmf
 
 # Functions ====================================================================
 
-def region(x: float, n0: int, n1: int, func='cdf', exhaustive=False, odds_ratio=False):
+def region(x: float, n0: int, n1: int, func='cdf', exhaustive=False):
     """Region of integration for bbprop_cdf or bbprop_test
 
     Parameters
@@ -37,22 +37,7 @@ def region(x: float, n0: int, n1: int, func='cdf', exhaustive=False, odds_ratio=
     if func not in {'cdf', 'test'}:
         raise RuntimeError('invalid "func" option')
 
-    if odds_ratio:
-        if func == 'cdf':
-            yield from (
-                (r0, r1)
-                for r0 in range(n0 + 1)
-                for r1 in range(n1 + 1)
-                if fisher_exact(((r0, n0-r0), (r1, n1-r1)))[0] <= x
-            )
-        elif func == 'test':
-            yield from (
-                (r0, r1)
-                for r0 in range(n0 + 1)
-                for r1 in range(n1 + 1)
-                if fisher_exact(((r0, n0-r0), (r1, n1-r1)))[0] >= x
-            )
-    elif not exhaustive:
+    if not exhaustive:
         if func == 'cdf':
             yield from (
                 (r0, r1)
